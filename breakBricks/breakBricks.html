@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>break the bricks</title>
+    <style>
+        #canvas {
+            border: 1px dotted black;
+        }
+    </style>
+</head>
+<body>
+<canvas id='canvas' height='400' width="480"></canvas>
+
+
+
+<script type="text/javascript" src="./js/game.js"></script>
+<script type="text/javascript" src="./js/paddle.js"></script>
+<script type="text/javascript" src="./js/ball.js"></script>
+<script type="text/javascript" src="./js/blocks.js"></script>
+<script type="text/javascript" src="./js/score.js"></script>
+<script type="text/javascript">
+    var log = console.log.bind(console)
+    var canvas = document.querySelector('#canvas'),
+        context = canvas.getContext('2d'),
+        images = {
+            ball: './images/paddle.jpg',
+            paddle: './images/paddle.jpg',
+            block: './images/paddle.jpg',
+        }
+
+    var game = new Game(canvas, images),
+        paddle = new Paddle(context),
+        ball = new Ball(context),
+        blocks = Blocks.map((item) => {
+            return new Block(context, item)
+        }),
+        score = new Score(context)
+
+
+    game.addAction('keydown', 'a', () => {
+        paddle.moveLeft(game)
+    })
+    game.addAction('keydown', 'd', () => {
+        paddle.moveRight(game)
+    })
+
+    game.ball = ball
+    game.paddle = paddle
+    game.blocks = blocks
+    game.score = score
+    game.run()
+
+</script>
+<!-- <script type="text/javascript" src="./js/breakBricks.js"></script> -->
+
+</body>
+</html>
