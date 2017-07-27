@@ -19,8 +19,10 @@
 <script type="text/javascript" src="./js/ball.js"></script>
 <script type="text/javascript" src="./js/blocks.js"></script>
 <script type="text/javascript" src="./js/score.js"></script>
+<script type="text/javascript" src="./js/scene.js"></script>
 <script type="text/javascript">
     var log = console.log.bind(console)
+    window.fps = 30
     var canvas = document.querySelector('#canvas'),
         context = canvas.getContext('2d'),
         images = {
@@ -28,31 +30,25 @@
             paddle: './images/paddle.jpg',
             block: './images/paddle.jpg',
         }
+    var Blocks = [
+        { x: 380, y: 10, w: 30, h: 10, lifes: 1 },
+        { x: 40, y: 40, w: 30, h: 10, lifes: 2 },
+        { x: 180, y: 210, w: 100, h: 30, lifes: 3 },
+        { x: 90, y: 90, w: 100, h: 20, lifes: 2 },
+    ]
+
+    window.pause = false
+    window.addEventListener('keydown', (e) => {
+        if (e.key == 'p') {
+            window.pause = !window.pause
+        }
+    })
 
     var game = new Game(canvas, images),
-        paddle = new Paddle(context),
-        ball = new Ball(context),
-        blocks = Blocks.map((item) => {
-            return new Block(context, item)
-        }),
-        score = new Score(context)
-
-
-    game.addAction('keydown', 'a', () => {
-        paddle.moveLeft(game)
-    })
-    game.addAction('keydown', 'd', () => {
-        paddle.moveRight(game)
-    })
-
-    game.ball = ball
-    game.paddle = paddle
-    game.blocks = blocks
-    game.score = score
-    game.run()
+        scene_start = new SceneStart(game)
+    game.scene = scene_start
+    game.init()
 
 </script>
-<!-- <script type="text/javascript" src="./js/breakBricks.js"></script> -->
-
 </body>
 </html>

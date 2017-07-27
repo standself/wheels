@@ -1,18 +1,17 @@
 class Ball {
-    constructor(cxt) {
-        this.cxt = cxt
+    constructor(game) {
+        this.ctx = game.ctx
         this.x = 200
         this.y = 200
-        this.img = null
+        this.img = game.getImageByName('ball')
         this.yspeed = 10
         this.xspeed = 10
         this.w = 15
         this.h = 15
     }
 
-    draw(g) {
-        this.img = this.img || g.getImageByName('ball')
-        this.cxt.drawImage(this.img, this.x, this.y, this.w, this.h)
+    draw() {
+        this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h)
     }
     move() {
         this.x += this.xspeed
@@ -24,11 +23,29 @@ class Ball {
             this.yspeed = -this.yspeed
         }
     }
-    bounce(directions) {
-        var x = directions && directions.down || false,
-            y = directions && directions.up || false
-        if (x || y) {
-            this.yspeed = -this.yspeed
+    bounce() {
+        this.yspeed = -this.yspeed
+    }
+
+    collide(a) {
+        let points = [
+            [this.x, this.y],
+            [this.x, this.y + this.h],
+            [this.x + this.w, this.y],
+            [this.x + this.w, this.y + this.h],
+        ]
+        
+        let aParams = [a.x, a.y, a.img.width, a.img.height]
+        return isCollsion(...points[0].concat(aParams))
+            || isCollsion(...points[2].concat(aParams))
+            || isCollsion(...points[1].concat(aParams))
+            || isCollsion(...points[3].concat(aParams));
+
+        function isCollsion(bx, by, ax, ay, aw, ah) {  
+            if (bx >= ax && bx <= ax + aw && by >= ay && by <= ay + ah) {  
+                return true;
+            }   
+            return false;  
         }
     }
 }
